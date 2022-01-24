@@ -7,7 +7,10 @@
 
 
 - install g++-4.8 (with old ubuntu apt repository)
-	+ (stackoverflow)[https://askubuntu.com/questions/371171/terminal-commands-for-installing-g-4-8]
+	+ **temporarily** add the line `deb http://archive.ubuntu.com/ubuntu/ bionic main universe` to `/etc/apt/sources.list`
+	+ `sudo apt update`
+	+ `sudo apt install g++-4.8`
+	+ remove the line from `/etc/apt/sources.list`
 - download systemc-2.3.1a.tar.gz from https://accellera.org/downloads/standards/systemc
 - `mv systemc-2.3.1a.tar.gz /home/user/`
 - `tar -zxvf systemc-2.3.1a.tar.gz`
