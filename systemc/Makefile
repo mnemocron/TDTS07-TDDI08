@@ -9,6 +9,7 @@ SRCS = light.cc sensor.cc controller.cc monitor.cc traffic_testbench.cc
 ##################################
 
 SYSTEMC = /home/simon/systemc-2.3.1a
+#/mnt/c/users/julee/systemc-2.3.1a
 #SYSTEMC = /courses/TDTS07/sw/systemc
 TARGET_ARCH = linux64
 

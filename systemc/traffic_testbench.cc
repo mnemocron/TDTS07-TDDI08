@@ -10,11 +10,11 @@ int sc_main(int argc, char **argv)
   // 1. the simulation time (in seconds),
   // 2. the file with input data (see input.txt), and
   // 3. the file to write output data.
-  assert(argc == 4);
+  assert(argc == 3);
 
   sc_time sim_time(atof(argv[1]), SC_SEC);
-  char *infile = argv[2];
-  char *outfile = argv[3];
+  //char *infile = argv[2];
+  char *outfile = argv[2];
 
   // Create channels.
   sc_signal<bool> NS_hasCars;
