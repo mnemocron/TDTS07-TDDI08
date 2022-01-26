@@ -7,7 +7,10 @@
 using std::ofstream;
 
 SC_MODULE(Monitor) {
-  // sc_in<double> quotient;
+  sc_in<int> light_NS_color;
+  sc_in<int> light_SN_color;
+  sc_in<int> light_EW_color;
+  sc_in<int> light_WE_color;
 
   SC_HAS_PROCESS(Monitor);
   Monitor(sc_module_name name, char *outfile);

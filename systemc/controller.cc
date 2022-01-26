@@ -3,42 +3,76 @@
 Controller::Controller(sc_module_name name)
   : sc_module(name)
 {
-  roadMutex.initialize(ROAD_DIRECTION_FREE);
-  // mutexDirection.initialize(ROAD_DIRECTION_FREE);
-  counter = 0;
-  queueLine = 0;
+  en_axis_NS.initialize(false);
+  en_axis_EW.initialize(false);
 
-  // SC_METHOD(divide_method);
+  state_now  = STATE_FREE;
+  state_next = STATE_FREE;
+
+  SC_METHOD(loop);
   dont_initialize();
 }
 
 void Controller::loop()
 {
   for(;;){
-    if(roadMutex != ROAD_DIRECTION_FREE){
-      if(queueLine > 0){
-        counter++;
-        if(counter > TIMEOUT_BEFORE_SWITCH){
-          queueLine = 0;
+    switch(state_now){
+      case(STATE_FREE):
+        if(NS_hasCars.read() == true || SN_hasCars.read() == true){
+          state_next = STATE_NS_AXIS;
+          en_axis_EW.write(false);
+          en_axis_NS.write(true);
           counter = 0;
-          // revoke mutex from any light that has it
-          roadMutex.write(ROAD_DIRECTION_FREE); 
         }
-      }
+        if(EW_hasCars.read() == true || EW_hasCars.read() == true){
+          state_next = STATE_EW_AXIS;
+          en_axis_EW.write(true);
+          en_axis_NS.write(false);
+          counter = 0;
+        }
+        break;
+
+      case(STATE_NS_AXIS):
+        if(EW_hasCars.read() == true || WE_hasCars.read() == true){
+          counter ++;
+          if(counter > TIMEOUT_BEFORE_SWITCH){
+            counter = 0;
+            state_next = STATE_EW_AXIS;
+            en_axis_EW.write(true);
+            en_axis_NS.write(false);
+          }
+        } else {
+          if(NS_hasCars.read() == false && SN_hasCars.read() == false){
+            state_next = STATE_FREE;
+            en_axis_EW.write(false);
+            en_axis_NS.write(false);
+          }
+        }
+        break;
+
+      case(STATE_EW_AXIS):
+        if(NS_hasCars.read() == true || SN_hasCars.read() == true){
+          counter ++;
+          if(counter > TIMEOUT_BEFORE_SWITCH){
+            counter = 0;
+            state_next = STATE_NS_AXIS;
+            en_axis_EW.write(false);
+            en_axis_NS.write(true);
+          }
+        } else {
+          if(EW_hasCars.read() == false && WE_hasCars.read() == false){
+            state_next = STATE_FREE;
+            en_axis_EW.write(false);
+            en_axis_NS.write(false);
+          }
+        }
+        break;
+      default:
+        state_next = STATE_FREE;
+        break;
     }
     wait(1, SC_SEC);
+    state_now = state_next;
   }
 }
 
-int Controller::get_open_road_direction(int lightpos)
-{
-  if(roadMutex == ROAD_DIRECTION_FREE){
-    if(lightpos == LIGHT_POS_NS || lightpos == LIGHT_POS_SN){
-      roadMutex = ROAD_DIRECTION_NS;
-    }
-    if(lightpos == LIGHT_POS_EW || lightpos == LIGHT_POS_WE){
-      roadMutex = ROAD_DIRECTION_EW;
-    }
-  }
-  return 0;
-}

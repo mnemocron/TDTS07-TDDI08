@@ -12,13 +12,13 @@
 #define LIGHT_COLOR_GREEN 255
 
 SC_MODULE(Light) {
-  sc_in<bool> mutex_road;
-  sc_in<bool> queue;
   sc_in<bool> sensor;
+  sc_in<bool> en_road;
+  sc_out<bool> haveCars;
   sc_out<int> color;
 
   SC_HAS_PROCESS(Light);
-  Light(sc_module_name name, int lightpos);
+  Light(sc_module_name name);
 
   void loop();
 
