@@ -21,5 +21,5 @@ void Light::loop()
     haveCars->write(false);
     color->write(LIGHT_COLOR_RED);
   }
-  wait(1, SC_SEC);
+  // wait(1, SC_SEC);   // is this necessary, if it is triggered by sensitivity?
 }

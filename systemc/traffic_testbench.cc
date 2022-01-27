@@ -27,13 +27,17 @@ int sc_main(int argc, char **argv)
   sc_signal<int>  light_SN_color;
   sc_signal<int>  light_EW_color;
   sc_signal<int>  light_WE_color;
+  sc_signal<bool>  sensor_NS;
+  sc_signal<bool>  sensor_SN;
+  sc_signal<bool>  sensor_EW;
+  sc_signal<bool>  sensor_WE;
 
   // Instantiate modules.
-  Light light_NS("Light NS");
-  Light light_SN("Light SN");
-  Light light_WE("Light WE");
-  Light light_EW("Light EW");
-  Controller coordinator("Light Controller");
+  Light light_NS("Light_NS");
+  Light light_SN("Light_SN");
+  Light light_WE("Light_WE");
+  Light light_EW("Light_EW");
+  Controller coordinator("Light_Controller");
   Monitor monitor("Monitor", outfile);
 
   // Port MAP
@@ -53,6 +57,16 @@ int sc_main(int argc, char **argv)
   light_SN.haveCars ( SN_hasCars );
   light_EW.haveCars ( EW_hasCars );
   light_WE.haveCars ( WE_hasCars );
+
+  light_NS.color ( light_NS_color );
+  light_SN.color ( light_SN_color );
+  light_EW.color ( light_EW_color );
+  light_WE.color ( light_WE_color );
+
+  light_NS.sensor ( sensor_NS );
+  light_SN.sensor ( sensor_SN );
+  light_EW.sensor ( sensor_EW );
+  light_WE.sensor ( sensor_WE );
 
   monitor.light_NS_color(light_NS_color);
   monitor.light_SN_color(light_SN_color);
