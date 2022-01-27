@@ -16,8 +16,6 @@ Controller::Controller(sc_module_name name)
 void Controller::loop()
 {
   for(;;){
-    // Frage: Ist es im Moment auch umgestetzt, dass NS und SN, 
-    // sowie EW und EW jeweils auch independently schalten?
     switch(state_now){
       case(STATE_FREE):
       // Frage: kann es hier passieren, dass auf einmal alle 4 Ampeln grün sind?

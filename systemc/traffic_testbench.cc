@@ -10,11 +10,11 @@ int sc_main(int argc, char **argv)
   // 1. the simulation time (in seconds),
   // 2. the file with input data (see input.txt), and
   // 3. the file to write output data.
-  assert(argc == 3);
+  assert(argc == 4);
 
   sc_time sim_time(atof(argv[1]), SC_SEC);
-  //char *infile = argv[2];
-  char *outfile = argv[2];
+  char *infile = argv[2];
+  char *outfile = argv[3];
 
   // Create channels.
   sc_signal<bool> NS_hasCars;
@@ -31,6 +31,7 @@ int sc_main(int argc, char **argv)
   sc_signal<bool>  sensor_SN;
   sc_signal<bool>  sensor_EW;
   sc_signal<bool>  sensor_WE;
+  sc_signal<int> state;
 
   // Instantiate modules.
   Light light_NS("Light_NS");
@@ -38,6 +39,7 @@ int sc_main(int argc, char **argv)
   Light light_WE("Light_WE");
   Light light_EW("Light_EW");
   Controller coordinator("Light_Controller");
+  Sensor sensor("Sensor", infile);
   Monitor monitor("Monitor", outfile);
 
   // Port MAP
@@ -67,6 +69,8 @@ int sc_main(int argc, char **argv)
   light_SN.sensor ( sensor_SN );
   light_EW.sensor ( sensor_EW );
   light_WE.sensor ( sensor_WE );
+
+  sensor.state ( state );
 
   monitor.light_NS_color(light_NS_color);
   monitor.light_SN_color(light_SN_color);

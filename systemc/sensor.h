@@ -4,14 +4,24 @@
 #include <systemc.h>
 #include <fstream>
 
-SC_MODULE(Sensor) {
+using std::ifstream;
 
-  ifstream traffic;
+#define NOT_WAITING 0
+#define WAITING 1
+
+#define MAX_WAITING 10 // in seconds
+
+SC_MODULE(Sensor) {
+  sc_out<int> state;
+  
+  int counter;
 
   SC_HAS_PROCESS(Sensor);
-  Sensor(sc_module_name name);
+  Sensor(sc_module_name name, char *datafile);
 
-  void loop();
+  void generate_stimuli();
+
+  ifstream *sensor_in;
 
 };
 
