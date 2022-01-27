@@ -18,14 +18,12 @@ void Controller::loop()
   for(;;){
     switch(state_now){
       case(STATE_FREE):
-      // Frage: kann es hier passieren, dass auf einmal alle 4 Ampeln grün sind?
         if(NS_hasCars.read() == true || SN_hasCars.read() == true){
           state_next = STATE_NS_AXIS;
           en_axis_EW.write(false);
           en_axis_NS.write(true);
           counter = 0;
-        }
-        if(EW_hasCars.read() == true || EW_hasCars.read() == true){
+        } else if(EW_hasCars.read() == true || EW_hasCars.read() == true){
           state_next = STATE_EW_AXIS;
           en_axis_EW.write(true);
           en_axis_NS.write(false);
@@ -34,15 +32,18 @@ void Controller::loop()
         break;
 
       case(STATE_NS_AXIS):
+        // if the other axis has cars waiting
         if(EW_hasCars.read() == true || WE_hasCars.read() == true){
-          counter ++;
+          counter ++; // start counting down before switching to other axis
           if(counter > TIMEOUT_BEFORE_SWITCH){
             counter = 0;
             state_next = STATE_EW_AXIS;
-            en_axis_EW.write(true);
-            en_axis_NS.write(false);
+            en_axis_NS.write(false);        // turn red
+            wait(TIMEOUT_DEADTIME, SC_SEC); // wait before allowing GREEN
+            en_axis_EW.write(true);         // turn green
           }
         } else {
+          // if no car is here, free up the road
           if(NS_hasCars.read() == false && SN_hasCars.read() == false){
             state_next = STATE_FREE;
             en_axis_EW.write(false);
@@ -52,15 +53,18 @@ void Controller::loop()
         break;
 
       case(STATE_EW_AXIS):
+        // if the other axis has cars waiting
         if(NS_hasCars.read() == true || SN_hasCars.read() == true){
-          counter ++;
+          counter ++; // start counting down before switching to other axis
           if(counter > TIMEOUT_BEFORE_SWITCH){
             counter = 0;
             state_next = STATE_NS_AXIS;
-            en_axis_EW.write(false);
-            en_axis_NS.write(true);
+            en_axis_EW.write(false);        // turn red
+            wait(TIMEOUT_DEADTIME, SC_SEC); // wait before allowing GREEN
+            en_axis_NS.write(true);         // turn green
           }
         } else {
+          // if no car is here, free up the road
           if(EW_hasCars.read() == false && WE_hasCars.read() == false){
             state_next = STATE_FREE;
             en_axis_EW.write(false);
