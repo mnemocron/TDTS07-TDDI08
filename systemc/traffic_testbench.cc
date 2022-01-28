@@ -17,10 +17,6 @@ int sc_main(int argc, char **argv)
   char *outfile = argv[3];
 
   // Create channels.
-  sc_signal<bool> NS_hasCars;
-  sc_signal<bool> SN_hasCars;
-  sc_signal<bool> EW_hasCars;
-  sc_signal<bool> WE_hasCars;
   sc_signal<bool> en_axis_NS;
   sc_signal<bool> en_axis_EW;
   sc_signal<int>  light_NS_color;
@@ -45,20 +41,15 @@ int sc_main(int argc, char **argv)
   // Port MAP
   coordinator.en_axis_NS ( en_axis_NS );
   coordinator.en_axis_EW ( en_axis_EW );
-  coordinator.NS_hasCars ( NS_hasCars );
-  coordinator.SN_hasCars ( SN_hasCars );
-  coordinator.EW_hasCars ( EW_hasCars );
-  coordinator.WE_hasCars ( WE_hasCars );
+  coordinator.NS_hasCars ( sensor_NS );
+  coordinator.SN_hasCars ( sensor_SN );
+  coordinator.EW_hasCars ( sensor_EW );
+  coordinator.WE_hasCars ( sensor_WE );
 
   light_NS.en_road ( en_axis_NS );
   light_SN.en_road ( en_axis_NS );
   light_EW.en_road ( en_axis_EW );
   light_WE.en_road ( en_axis_EW );
-
-  light_NS.haveCars ( NS_hasCars );
-  light_SN.haveCars ( SN_hasCars );
-  light_EW.haveCars ( EW_hasCars );
-  light_WE.haveCars ( WE_hasCars );
 
   light_NS.color ( light_NS_color );
   light_SN.color ( light_SN_color );

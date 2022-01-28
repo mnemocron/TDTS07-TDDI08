@@ -13,12 +13,12 @@ Light::Light(sc_module_name name)
 void Light::loop()
 {
   if(sensor->read() == true){
-    haveCars->write(true);
+    // haveCars->write(true);
     if(en_road->read() == true){
       color->write(LIGHT_COLOR_GREEN);
     }
   } else {
-    haveCars->write(false);
+    // haveCars->write(false);
     color->write(LIGHT_COLOR_RED);
   }
   // wait(1, SC_SEC);   // is this necessary, if it is triggered by sensitivity?

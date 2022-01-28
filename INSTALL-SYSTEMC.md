@@ -7,7 +7,8 @@
 
 
 - install g++-4.8 (with old ubuntu apt repository)
-	+ **temporarily** add the line `deb http://archive.ubuntu.com/ubuntu/ bionic main universe` to `/etc/apt/sources.list`
+	+ **temporarily** add the line `deb <link> bionic main universe` to `/etc/apt/sources.list`
+		* e.g. `deb http://archive.ubuntu.com/ubuntu/ bionic main universe` to `/etc/apt/sources.list`
 	+ `sudo apt update`
 	+ `sudo apt install g++-4.8`
 	+ remove the line from `/etc/apt/sources.list`
