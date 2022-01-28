@@ -1,4 +1,5 @@
 #include "sensor.h"
+#include <iostream>
 
 Sensor::Sensor(sc_module_name name, char *datafile)
   : sc_module(name)
@@ -10,7 +11,7 @@ Sensor::Sensor(sc_module_name name, char *datafile)
   assert(*sensor_in);
 
   SC_THREAD(generate_stimuli);
-  state.initialize(NOT_WAITING);
+  dont_initialize();
 }
 
 /*Sensor::~Sensor()
@@ -20,21 +21,21 @@ Sensor::Sensor(sc_module_name name, char *datafile)
 
 void Sensor::generate_stimuli()
 {
-  /*if(state->read() == 0){
-    if (counter > MAX_WAITING) {
-      counter = 0;
-    }
-
-  } else {
-    counter++;
-  }*/
-  int current;
+  int ns;
+  int sn;
+  int ew;
+  int we;
   for (;;) {
     wait(1, SC_SEC);     // Generate new inputs every second.
-    *sensor_in >> current; // Read from the input file.
-    printf("%c", current);
-    state->write(current);
+    *sensor_in >> ns >> sn >> ew >> we; // Read from the input file.
+    //std::cout << ns;
+    //std::cout << sn;
+    //std::cout << ew;
+    //std::cout << we;
+    state_NS->write(ns);
+    state_SN->write(sn);
+    state_EW->write(ew);
+    state_WE->write(we);
   }
 
 };
-

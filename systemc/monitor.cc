@@ -15,6 +15,10 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   SC_METHOD(check_constraints_method);
   dont_initialize();
   // sensitive << denominator;
+  //sensitive << light_NS_color;
+  //sensitive << light_SN_color;
+  //sensitive << light_EW_color;
+  //sensitive << light_WE_color;
 }
 
 Monitor::~Monitor()
@@ -30,5 +34,15 @@ void Monitor::monitor_method()
 
 void Monitor::check_constraints_method()
 {
+  // check the constraints via assertions in here
+
+  // EW can only be green when NS and SN are red
+  //assert(light_EW_color == 1 && light_NS_color == 0 && light_SN_color == 0);
+  // WE can only be green when NS and SN are red
+  //assert(light_WE_color == 1 && light_NS_color == 0 && light_SN_color == 0);
+  // NS can only be green when WE and EW are red
+  //assert(light_NS_color == 1 && light_WE_color == 0 && light_EW_color == 0);
+  // SN can only be green when WE and EW are red
+  //assert(light_SN_color == 1 && light_WE_color == 0 && light_EW_color == 0);
   // assert(denominator != 0);
 }

@@ -12,8 +12,11 @@ using std::ifstream;
 #define MAX_WAITING 10 // in seconds
 
 SC_MODULE(Sensor) {
-  sc_out<int> state;
-  
+  sc_out<bool> state_NS;
+  sc_out<bool> state_SN;
+  sc_out<bool> state_EW;
+  sc_out<bool> state_WE;
+
   int counter;
 
   SC_HAS_PROCESS(Sensor);

@@ -17,7 +17,9 @@ LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
 LIBS = -Wl,-Bstatic -lsystemc -Wl,-Bdynamic -lm -lpthread
 LDFLAGS = -g
 
+#When working on the lab computers take the g++ version
 CC = g++-4.8
+#CC = g++
 OPT = -O3
 CFLAGS = -Wno-deprecated
 EXE = $(PROGRAM)

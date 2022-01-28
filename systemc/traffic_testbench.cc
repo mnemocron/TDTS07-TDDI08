@@ -70,7 +70,10 @@ int sc_main(int argc, char **argv)
   light_EW.sensor ( sensor_EW );
   light_WE.sensor ( sensor_WE );
 
-  sensor.state ( state );
+  sensor.state_NS ( sensor_NS );
+  sensor.state_SN ( sensor_SN );
+  sensor.state_EW ( sensor_EW );
+  sensor.state_WE ( sensor_WE );
 
   monitor.light_NS_color(light_NS_color);
   monitor.light_SN_color(light_SN_color);
