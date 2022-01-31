@@ -80,6 +80,14 @@ int sc_main(int argc, char **argv)
   monitor.light_EW_color(light_EW_color);
   monitor.light_WE_color(light_WE_color);
 
+  monitor.en_axis_NS ( en_axis_NS );
+  monitor.en_axis_EW ( en_axis_EW );
+
+  monitor.NS_hasCars ( NS_hasCars );
+  monitor.SN_hasCars ( SN_hasCars );
+  monitor.EW_hasCars ( EW_hasCars );
+  monitor.WE_hasCars ( WE_hasCars );
+
   // Start the simulation.
   sc_start(sim_time);
 
