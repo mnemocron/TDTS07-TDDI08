@@ -74,7 +74,7 @@ void Monitor::safety_constraints()
 
 void Monitor::crossing_arrival_constraints()
 {
-  // is there some public counter needed to show that a green light will eventually be granted?
+  // with the current solution that some cars from the sensor input can simply disapear, we might not satisfy constraint 3
 }
 
 void Monitor::independent_lights_constraints()
@@ -86,9 +86,9 @@ void Monitor::independent_lights_constraints()
   // but in this case, the stop light is not supposed to go back to red
   // it is allowed to stay green
   if(en_axis_NS){
-    if(light_SN_color == LIGHT_COLOR_GREEN){
-      if(!NS_hasCars){
-        // assert(light_NS_color == LIGHT_COLOR_RED);
+    if(light_NS_color == LIGHT_COLOR_GREEN){
+      if(!SN_hasCars){
+        // assert(light_SN_color == LIGHT_COLOR_RED);
       }
     }
   }

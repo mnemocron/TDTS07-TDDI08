@@ -21,6 +21,7 @@ SC_MODULE(Sensor) {
 
   SC_HAS_PROCESS(Sensor);
   Sensor(sc_module_name name, char *datafile);
+  ~Sensor();
 
   void generate_stimuli();
 

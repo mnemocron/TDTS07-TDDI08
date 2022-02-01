@@ -14,10 +14,10 @@ Sensor::Sensor(sc_module_name name, char *datafile)
   //dont_initialize();
 }
 
-/*Sensor::~Sensor()
+Sensor::~Sensor()
 {
   delete sensor_in;
-};*/
+}
 
 void Sensor::generate_stimuli()
 {
@@ -38,4 +38,4 @@ void Sensor::generate_stimuli()
     state_WE->write(we);
   }
 
-};
+}
