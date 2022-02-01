@@ -11,7 +11,7 @@ Sensor::Sensor(sc_module_name name, char *datafile)
   assert(*sensor_in);
 
   SC_THREAD(generate_stimuli);
-  dont_initialize();
+  //dont_initialize();
 }
 
 /*Sensor::~Sensor()

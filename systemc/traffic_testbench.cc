@@ -74,10 +74,10 @@ int sc_main(int argc, char **argv)
   monitor.en_axis_NS ( en_axis_NS );
   monitor.en_axis_EW ( en_axis_EW );
 
-  monitor.NS_hasCars ( NS_hasCars );
-  monitor.SN_hasCars ( SN_hasCars );
-  monitor.EW_hasCars ( EW_hasCars );
-  monitor.WE_hasCars ( WE_hasCars );
+  monitor.NS_hasCars ( sensor_NS );
+  monitor.SN_hasCars ( sensor_SN );
+  monitor.EW_hasCars ( sensor_EW );
+  monitor.WE_hasCars ( sensor_WE );
 
   // Start the simulation.
   sc_start(sim_time);

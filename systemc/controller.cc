@@ -9,8 +9,8 @@ Controller::Controller(sc_module_name name)
   state_now  = STATE_FREE;
   state_next = STATE_FREE;
 
-  SC_METHOD(loop);
-  dont_initialize();
+  SC_THREAD(loop);
+  //dont_initialize();
 }
 
 void Controller::loop()
