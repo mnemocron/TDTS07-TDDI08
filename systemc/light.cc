@@ -12,9 +12,9 @@ Light::Light(sc_module_name name)
 
 void Light::loop()
 {
-  if(sensor->read() == true){
-    // haveCars->write(true);
-    if(en_road->read() == true){
+  if(en_road->read() == true){
+    if(sensor->read() == true){
+      // haveCars->write(true);
       color->write(LIGHT_COLOR_GREEN);
     }
   } else {

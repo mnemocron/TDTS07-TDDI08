@@ -57,19 +57,23 @@ void Monitor::monitor_method()
 void Monitor::safety_constraints()
 { 
   // they are allowed to both be 0 but never to be 1 at the same time
-  assert(  !( (en_axis_EW == 1) && (en_axis_NS == 1) ) );
+  assert(  !( (en_axis_EW == 1) && (en_axis_NS == 1) ) && "Both roads are enabled at the same time!");
   // NS can only be green when WE and EW are red
-  if(light_NS_color == LIGHT_COLOR_GREEN)
-    assert(light_WE_color == LIGHT_COLOR_RED && light_EW_color == LIGHT_COLOR_RED);
+  if(light_NS_color == LIGHT_COLOR_GREEN){
+    assert((light_WE_color == LIGHT_COLOR_RED) && (light_EW_color == LIGHT_COLOR_RED));
+  }
   // SN can only be green when WE and EW are red
-  if(light_SN_color == LIGHT_COLOR_GREEN)
-    assert(light_WE_color == LIGHT_COLOR_RED && light_EW_color == LIGHT_COLOR_RED);
+  if(light_SN_color == LIGHT_COLOR_GREEN){
+    assert((light_WE_color == LIGHT_COLOR_RED) && (light_EW_color == LIGHT_COLOR_RED));
+  }
   // EW can only be green when NS and SN are red
-  if(light_EW_color == LIGHT_COLOR_GREEN)
-    assert(light_SN_color == LIGHT_COLOR_RED && light_NS_color == LIGHT_COLOR_RED);
+  if(light_EW_color == LIGHT_COLOR_GREEN){
+    assert((light_SN_color == LIGHT_COLOR_RED) && (light_NS_color == LIGHT_COLOR_RED));
+  }
   // WE can only be green when NS and SN are red
-  if(light_WE_color == LIGHT_COLOR_GREEN)
-    assert(light_SN_color == LIGHT_COLOR_RED && light_NS_color == LIGHT_COLOR_RED);
+  if(light_WE_color == LIGHT_COLOR_GREEN){
+    assert((light_SN_color == LIGHT_COLOR_RED) && (light_NS_color == LIGHT_COLOR_RED));
+  }
 }
 
 void Monitor::crossing_arrival_constraints()
