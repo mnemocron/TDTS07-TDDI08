@@ -17,6 +17,11 @@ SC_MODULE(Sensor) {
   sc_out<bool> state_EW;
   sc_out<bool> state_WE;
 
+  sc_out<int> nr_state_NS;
+  sc_out<int> nr_state_SN;
+  sc_out<int> nr_state_EW;
+  sc_out<int> nr_state_WE;
+
   int counter;
 
   SC_HAS_PROCESS(Sensor);

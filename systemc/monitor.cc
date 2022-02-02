@@ -24,6 +24,11 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << EW_hasCars;
   sensitive << WE_hasCars;
 
+  sensitive << nr_state_NS;
+  sensitive << nr_state_SN;
+  sensitive << nr_state_EW;
+  sensitive << nr_state_WE;
+
   SC_METHOD(check_constraints_method);
   dont_initialize();
   sensitive << light_NS_color;
@@ -39,7 +44,7 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << EW_hasCars;
   sensitive << WE_hasCars;
 
-  *out<<"time,\ten_NS,\ten_EW,\ts_NS,\ts_SN,\ts_EW,\ts_WE,\tcol_NS,\tcol_SN,\tcol_EW,\tcol_WE"<<endl;
+  *out<<"time,\ten_NS,\ten_EW,\ts_NS,\ts_SN,\ts_EW,\ts_WE,\tcol_NS,\tcol_SN,\tcol_EW,\tcol_WE\tnr_s_NS,\tnr_s_SN,\tnr_s_EW,\tnr_s_WE"<<endl;
 }
 
 Monitor::~Monitor()
@@ -51,7 +56,8 @@ void Monitor::monitor_method()
 {
   *out<<sc_time_stamp()<<",\t"<<en_axis_NS<<",\t"<<en_axis_EW;
   *out<<",\t"<<NS_hasCars<<",\t"<<SN_hasCars<<",\t"<<EW_hasCars<<",\t"<<WE_hasCars;
-  *out<<",\t"<<light_NS_color<<",\t"<<light_SN_color<<",\t"<<light_EW_color<<",\t"<<light_WE_color<<endl;
+  *out<<",\t"<<light_NS_color<<",\t"<<light_SN_color<<",\t"<<light_EW_color<<",\t"<<light_WE_color;
+  *out<<",\t"<<nr_state_NS<<",\t"<<nr_state_SN<<",\t"<<nr_state_EW<<",\t"<<nr_state_WE<<endl;
 }
 
 void Monitor::safety_constraints()

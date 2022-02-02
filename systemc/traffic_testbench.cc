@@ -29,6 +29,11 @@ int sc_main(int argc, char **argv)
   sc_signal<bool>  sensor_WE;
   sc_signal<int> state;
 
+  sc_signal<int, SC_MANY_WRITERS> nr_state_NS;
+  sc_signal<int, SC_MANY_WRITERS> nr_state_SN;
+  sc_signal<int, SC_MANY_WRITERS> nr_state_EW;
+  sc_signal<int, SC_MANY_WRITERS> nr_state_WE;
+
   // Instantiate modules.
   Light light_NS("Light_NS");
   Light light_SN("Light_SN");
@@ -61,10 +66,20 @@ int sc_main(int argc, char **argv)
   light_EW.sensor ( sensor_EW );
   light_WE.sensor ( sensor_WE );
 
+  light_NS.car_amount ( nr_state_NS );
+  light_SN.car_amount ( nr_state_SN );
+  light_EW.car_amount ( nr_state_EW );
+  light_WE.car_amount ( nr_state_WE );
+
   sensor.state_NS ( sensor_NS );
   sensor.state_SN ( sensor_SN );
   sensor.state_EW ( sensor_EW );
   sensor.state_WE ( sensor_WE );
+
+  sensor.nr_state_NS ( nr_state_NS );
+  sensor.nr_state_SN ( nr_state_SN );
+  sensor.nr_state_EW ( nr_state_EW );
+  sensor.nr_state_WE ( nr_state_WE );
 
   monitor.light_NS_color(light_NS_color);
   monitor.light_SN_color(light_SN_color);
@@ -78,6 +93,11 @@ int sc_main(int argc, char **argv)
   monitor.SN_hasCars ( sensor_SN );
   monitor.EW_hasCars ( sensor_EW );
   monitor.WE_hasCars ( sensor_WE );
+
+  monitor.nr_state_NS ( nr_state_NS );
+  monitor.nr_state_SN ( nr_state_SN );
+  monitor.nr_state_EW ( nr_state_EW );
+  monitor.nr_state_WE ( nr_state_WE );
 
   // Start the simulation.
   sc_start(sim_time);

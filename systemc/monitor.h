@@ -20,6 +20,11 @@ SC_MODULE(Monitor) {
   sc_in<bool> en_axis_NS;
   sc_in<bool> en_axis_EW;
 
+  sc_in<int> nr_state_NS;
+  sc_in<int> nr_state_SN;
+  sc_in<int> nr_state_EW;
+  sc_in<int> nr_state_WE;
+
   SC_HAS_PROCESS(Monitor);
   Monitor(sc_module_name name, char *outfile);
   ~Monitor();
