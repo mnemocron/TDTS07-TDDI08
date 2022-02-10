@@ -6,7 +6,6 @@
 #define ROAD_DIRECTION_EW   255
 
 #define TIMEOUT_BEFORE_SWITCH 10 // in seconds
-#define TIMEOUT_DEADTIME      3  // in seconds
 
 #define STATE_FREE 0
 #define STATE_NS_AXIS 1

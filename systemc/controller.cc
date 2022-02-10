@@ -39,7 +39,6 @@ void Controller::loop()
             counter = 0;
             state_next = STATE_EW_AXIS;
             en_axis_NS.write(false);        // turn red
-            wait(TIMEOUT_DEADTIME, SC_SEC); // wait before allowing GREEN
             en_axis_EW.write(true);         // turn green
           }
         } else {
@@ -60,7 +59,6 @@ void Controller::loop()
             counter = 0;
             state_next = STATE_NS_AXIS;
             en_axis_EW.write(false);        // turn red
-            wait(TIMEOUT_DEADTIME, SC_SEC); // wait before allowing GREEN
             en_axis_NS.write(true);         // turn green
           }
         } else {

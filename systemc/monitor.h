@@ -20,7 +20,15 @@ SC_MODULE(Monitor) {
   sc_in<bool> en_axis_NS;
   sc_in<bool> en_axis_EW;
 
-  int counter_arriving;
+  int counter_arriving_NS;
+  int counter_arriving_SN;
+  int counter_arriving_EW;
+  int counter_arriving_WE;
+
+  bool had_green_light_NS;
+  bool had_green_light_SN;
+  bool had_green_light_EW;
+  bool had_green_light_WE;
 
   bool previous_car_NS;
   bool previous_car_SN;
