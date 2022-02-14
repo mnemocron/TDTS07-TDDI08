@@ -145,17 +145,17 @@ void Monitor::crossing_arrival_constraints()
     }
   }
 
-  // if (WE_hasCars) {
-  //   counter_arriving_WE ++;
-  //   if (light_WE_color == LIGHT_COLOR_GREEN) {
-  //     had_green_light_WE = true;  
-  //   }
-  //   if (counter_arriving_WE > (15) ) {
-  //     assert(had_green_light_WE);
-  //     counter_arriving_WE = 0;
-  //     had_green_light_WE = false;
-  //   }
-  // }
+  if (WE_hasCars) {
+    counter_arriving_WE ++;
+    if (light_WE_color == LIGHT_COLOR_GREEN) {
+      had_green_light_WE = true;  
+    }
+    if (counter_arriving_WE > (15) ) {
+      assert(had_green_light_WE);
+      counter_arriving_WE = 0;
+      had_green_light_WE = false;
+    }
+  }
 
 }
 
@@ -168,22 +168,26 @@ void Monitor::independent_lights_constraints()
   if(en_axis_NS){
     previous_car_EW = false;
     previous_car_WE = false;
+
     // if the light NS is green, the light SN is red if there are no cars coming in the direction SN
     if(light_NS_color == LIGHT_COLOR_GREEN){
+      previous_car_NS = true;                       // set flag to true if NS light became green before SN light was green
       if (SN_hasCars) {
         previous_car_SN = true;                     // a previous car for SN already has turned the SN-Light green
       } 
-      if(!SN_hasCars && !previous_car_SN) {  
-        // assert(light_SN_color == LIGHT_COLOR_RED);
+      if (!SN_hasCars && !previous_car_SN) {  
+        assert(light_SN_color == LIGHT_COLOR_RED);
       }
     }
 
     // if the light SN is green, the light NS is red if there are no cars coming in the direction NS
     if(light_SN_color == LIGHT_COLOR_GREEN){
+      previous_car_SN = true;                       // set flag to true if SN light became green before NS light was green
       if (NS_hasCars) {
         previous_car_NS = true;                     // a previous car for NS already has turned the NS-Light green
-      } else if(!NS_hasCars && !previous_car_NS) {  
-        // assert(light_NS_color == LIGHT_COLOR_RED);
+      } 
+      if (!NS_hasCars && !previous_car_NS) {  
+        assert(light_NS_color == LIGHT_COLOR_RED);
       }
     }
   }
@@ -193,19 +197,23 @@ void Monitor::independent_lights_constraints()
     previous_car_SN = false;
     // if the light EW is green, the light WE is red if there are no cars coming in the direction WE
     if(light_EW_color == LIGHT_COLOR_GREEN){
+      previous_car_EW = true;                       // set flag to true if EW light became green before WE light was green
       if (WE_hasCars) {
         previous_car_WE = true;                     // a previous car for WE already has turned the WE-Light green
-      } else if(!WE_hasCars && !previous_car_WE) {  
-        // assert(light_WE_color == LIGHT_COLOR_RED);
+      } 
+      if (!WE_hasCars && !previous_car_WE) {  
+        assert(light_WE_color == LIGHT_COLOR_RED);
       }
     }
 
     // if the light WE is green, the light EW is red if there are no cars coming in the direction EW
     if(light_WE_color == LIGHT_COLOR_GREEN){
+      previous_car_WE = true;                       // set flag to true if WE light became green before EW light was green
       if (EW_hasCars) {
         previous_car_EW = true;                     // a previous car for EW already has turned the EW-Light green
-      } else if(!EW_hasCars && !previous_car_EW) {  
-        // assert(light_EW_color == LIGHT_COLOR_RED);
+      } 
+      if (!EW_hasCars && !previous_car_EW) {  
+        assert(light_EW_color == LIGHT_COLOR_RED);
       }
     }
   }
@@ -216,5 +224,5 @@ void Monitor::check_constraints_method()
   // check the constraints via assertions in here
   safety_constraints();
   //crossing_arrival_constraints();
-  //independent_lights_constraints();
+  independent_lights_constraints();
 }
