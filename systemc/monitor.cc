@@ -2,6 +2,7 @@
 #include "monitor.h"
 #include "light.h"
 #include "controller.h"
+#include <stdio.h>
 
 Monitor::Monitor(sc_module_name name, char *outfile)
   : sc_module(name)
@@ -14,6 +15,15 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   previous_car_SN = false;
   previous_car_EW = false;
   previous_car_WE = false;
+
+  prev_ns=false; now_ns=false; car_waiting_ns=false;
+  prev_sn=false; now_sn=false; car_waiting_sn=false;
+  prev_ew=false; now_ew=false; car_waiting_ew=false;
+  prev_we=false; now_we=false; car_waiting_we=false;
+  eventually_ns = 0;
+  eventually_sn = 0;
+  eventually_ew = 0;
+  eventually_we = 0;
 
   SC_METHOD(monitor_method);
   dont_initialize();
@@ -30,7 +40,7 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << EW_hasCars;
   sensitive << WE_hasCars;
 
-  SC_METHOD(check_constraints_method);
+  SC_THREAD(check_constraints_method);
   dont_initialize();
   sensitive << light_NS_color;
   sensitive << light_SN_color;
@@ -45,7 +55,13 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << EW_hasCars;
   sensitive << WE_hasCars;
 
-  *out<<"time,\ten_NS,\ten_EW,\ts_NS,\ts_SN,\ts_EW,\ts_WE,\tcol_NS,\tcol_SN,\tcol_EW,\tcol_WE"<<endl;
+  *out<<"time,\t|en_NS,\ten_EW,\t|s_NS,\ts_SN,\ts_EW,\ts_WE,\t|c_NS,\tc_SN,\tc_EW,\tc_WE"<<endl;
+  emoji[LIGHT_COLOR_GREEN] = "🟢";
+  emoji[LIGHT_COLOR_RED] = "🔴";
+  emoji_car[0] = "0";
+  emoji_car[1] = "🚙";
+  emoji_sens[0] = "❌";
+  emoji_sens[1] = "✅";
 }
 
 Monitor::~Monitor()
@@ -55,9 +71,9 @@ Monitor::~Monitor()
 
 void Monitor::monitor_method()
 {
-  *out<<sc_time_stamp()<<",\t"<<en_axis_NS<<",\t"<<en_axis_EW;
-  *out<<",\t"<<NS_hasCars<<",\t"<<SN_hasCars<<",\t"<<EW_hasCars<<",\t"<<WE_hasCars;
-  *out<<",\t"<<light_NS_color<<",\t"<<light_SN_color<<",\t"<<light_EW_color<<",\t"<<light_WE_color<<endl;
+  *out<<sc_time_stamp()<<",\t|"<<emoji_sens[en_axis_NS]<<",\t"<<emoji_sens[en_axis_EW];
+  *out<<",\t|"<<emoji_car[NS_hasCars]<<",\t"<<emoji_car[SN_hasCars]<<",\t"<<emoji_car[EW_hasCars]<<",\t"<<emoji_car[WE_hasCars];
+  *out<<",\t|"<<emoji[light_NS_color]<<",\t"<<emoji[light_SN_color]<<",\t"<<emoji[light_EW_color]<<",\t"<<emoji[light_WE_color]<<endl;
 }
 
 void Monitor::safety_constraints()
@@ -84,83 +100,110 @@ void Monitor::safety_constraints()
 
 void Monitor::crossing_arrival_constraints()
 {
+  for(;;){
   // If a vehicle arrives at the crossing, it will eventually be granted the green light
-  // if (en_axis_EW == true) { // currently the EW axis is enabled 
-  //   if (NS_hasCars == true) { // but a car has arrived at NS
-  //     counter_arriving ++;
-  //     if (counter_arriving > (TIMEOUT_BEFORE_SWITCH) ) {
-  //       std::cout << "Counter Arriving ";
-  //       std::cout << counter_arriving;
-  //       std::cout << "\n";
-  //       counter_arriving = 0;
-  //       assert(en_axis_NS == true && light_NS_color == LIGHT_COLOR_GREEN);
-  //     }
-  //   } else {
-  //     counter_arriving = 0;
-  //   }
-  // }
+  now_ns = NS_hasCars;
+  now_sn = SN_hasCars;
+  now_ew = EW_hasCars;
+  now_we = WE_hasCars;
 
-  if (NS_hasCars) {
-    if (en_axis_NS) { //if the axis is enabled the arriving car should immediatly get green
-    //TODO: Modify when code is changed that arriving car a few second before timeout do not get green anymore
+  if(!car_waiting_ns){
+    if(now_ns > prev_ns){ // sensor just switched 0->1
+      car_waiting_ns = true; // remember that there is a car waiting
+    }
+  } else {
+    if(now_ns < prev_ns){ // sensor just switched 1->0
+      car_waiting_ns = false; // forget that ther is a car waiting
+    }
+  }
+
+  if(!car_waiting_sn){
+    if(now_sn > prev_sn){ // sensor just switched 0->1
+      car_waiting_sn = true; // remember that there is a car waiting
+    }
+  } else {
+    if(now_sn < prev_sn){ // sensor just switched 1->0
+      car_waiting_sn = false; // forget that ther is a car waiting
+    }
+  }
+
+  if(!car_waiting_ew){
+    if(now_ew > prev_ew){ // sensor just switched 0->1
+      car_waiting_ew = true; // remember that there is a car waiting
+    }
+  } else {
+    if(now_ew < prev_ew){ // sensor just switched 1->0
+      car_waiting_ew = false; // forget that ther is a car waiting
+    }
+  }
+
+  if(!car_waiting_we){
+    if(now_we > prev_we){ // sensor just switched 0->1
+      car_waiting_we = true; // remember that there is a car waiting
+    }
+  } else {
+    if(now_we < prev_we){ // sensor just switched 1->0
+      car_waiting_we = false; // forget that ther is a car waiting
+    }
+  }
+
+  // check independence of lights
+  // when axis is enabled and a new car arrives, the light should switch to green
+  if(en_axis_NS){
+    if(car_waiting_ns){
       assert(light_NS_color == LIGHT_COLOR_GREEN);
-    } else {
-      counter_arriving_NS ++;
-      if (light_NS_color == LIGHT_COLOR_GREEN) {
-        had_green_light_NS = true;
-      }
-      if (counter_arriving_NS > (15) ) {
-        assert(had_green_light_NS);
-        counter_arriving_NS = 0;
-        had_green_light_NS = false;
-      }
+    }
+    if(car_waiting_sn){
+      assert(light_SN_color == LIGHT_COLOR_GREEN);
     }
   }
-  
-  if (SN_hasCars) {
-    counter_arriving_SN ++;
-    if (light_SN_color == LIGHT_COLOR_GREEN) {
-      had_green_light_SN = true;
-    }
-    if (counter_arriving_SN > (15) ) {
-      assert(had_green_light_SN);
-      counter_arriving_SN = 0;
-      had_green_light_SN = false;
-    }
-  }
-
-  if (EW_hasCars) {
-    if (en_axis_EW) {
+  if(en_axis_EW){
+    if(car_waiting_ew){
       assert(light_EW_color == LIGHT_COLOR_GREEN);
-    } else { 
-      counter_arriving_EW ++;
-      if (light_EW_color == LIGHT_COLOR_GREEN) {
-        had_green_light_EW = true;   
-      }
-      if (counter_arriving_EW > (15) ) {
-        assert(had_green_light_EW);
-        counter_arriving_EW = 0;
-        had_green_light_EW = false;
-      }
+    }
+    if(car_waiting_we){
+      assert(light_WE_color == LIGHT_COLOR_GREEN);
     }
   }
 
-  if (WE_hasCars) {
-    counter_arriving_WE ++;
-    if (light_WE_color == LIGHT_COLOR_GREEN) {
-      had_green_light_WE = true;  
-    }
-    if (counter_arriving_WE > (15) ) {
-      assert(had_green_light_WE);
-      counter_arriving_WE = 0;
-      had_green_light_WE = false;
-    }
-  }
+  // check if the wrong axis is enabled, a waiting car will eventually be granted green
+  if(NS_hasCars && (light_NS_color == LIGHT_COLOR_RED))
+    eventually_ns ++;
+  else
+    eventually_ns = 0;
+  assert(eventually_ns < 12*TIMEOUT_BEFORE_SWITCH);
 
+  if(SN_hasCars && (light_SN_color == LIGHT_COLOR_RED))
+    eventually_sn ++;
+  else
+    eventually_sn = 0;
+  assert(eventually_sn < 12*TIMEOUT_BEFORE_SWITCH);
+
+  if(EW_hasCars && (light_EW_color == LIGHT_COLOR_RED))
+    eventually_ew ++;
+  else
+    eventually_ew = 0;
+  assert(eventually_ew < 12*TIMEOUT_BEFORE_SWITCH);
+
+  if(WE_hasCars && (light_WE_color == LIGHT_COLOR_RED))
+    eventually_we ++;
+  else
+    eventually_we = 0;
+  assert(eventually_we < 12*TIMEOUT_BEFORE_SWITCH);
+
+
+  prev_ns = now_ns;
+  prev_sn = now_sn;
+  prev_ew = now_ew;
+  prev_we = now_we;
+  
+  wait(0.1, SC_SEC);
+  }
 }
 
 void Monitor::independent_lights_constraints()
 {
+
   // for all cases it has to be checked if a car has already been there,
   // and hence the lights are already green 
   // since the lights do not have to switch back to red immediately after a car has crossed
@@ -223,6 +266,6 @@ void Monitor::check_constraints_method()
 {
   // check the constraints via assertions in here
   safety_constraints();
-  //crossing_arrival_constraints();
+  crossing_arrival_constraints();
   independent_lights_constraints();
 }

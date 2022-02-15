@@ -23,7 +23,7 @@ void Controller::loop()
           en_axis_EW.write(false);
           en_axis_NS.write(true);
           counter = 0;
-        } else if(EW_hasCars.read() == true || EW_hasCars.read() == true){
+        } else if(EW_hasCars.read() == true || WE_hasCars.read() == true){
           state_next = STATE_EW_AXIS;
           en_axis_EW.write(true);
           en_axis_NS.write(false);
