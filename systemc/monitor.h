@@ -35,6 +35,12 @@ SC_MODULE(Monitor) {
   bool previous_car_EW;
   bool previous_car_WE;
   
+  // edge detection on sensor signals
+  bool prev_ns, now_ns, car_waiting_ns;
+  bool prev_sn, now_sn, car_waiting_sn;
+  bool prev_ew, now_ew, car_waiting_ew;
+  bool prev_we, now_we, car_waiting_we;
+  int eventually_ns, eventually_sn, eventually_ew, eventually_we;
 
   SC_HAS_PROCESS(Monitor);
   Monitor(sc_module_name name, char *outfile);
@@ -47,6 +53,9 @@ SC_MODULE(Monitor) {
   void check_constraints_method();
 
   ofstream *out;
+  const char *emoji[256];  // for lights
+  const char *emoji_car[2];
+  const char *emoji_sens[2];
 };
 
 #endif // MONITOR_H
