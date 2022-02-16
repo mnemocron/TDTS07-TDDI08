@@ -7,4 +7,4 @@ SND = Sender();
 RCV = Receiver();
 CHAN = Channel(); 
 // List one or more processes to be composed into a system.
-system SND, RCV; //, CHAN;</system></nta>
+system SND, RCV, CHAN;</system></nta>
