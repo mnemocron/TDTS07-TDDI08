@@ -171,25 +171,25 @@ void Monitor::crossing_arrival_constraints()
     eventually_ns ++;
   else
     eventually_ns = 0;
-  assert(eventually_ns < 12*TIMEOUT_BEFORE_SWITCH);
+  assert(eventually_ns < 13*TIMEOUT_BEFORE_SWITCH);
 
   if(SN_hasCars && (light_SN_color == LIGHT_COLOR_RED))
     eventually_sn ++;
   else
     eventually_sn = 0;
-  assert(eventually_sn < 12*TIMEOUT_BEFORE_SWITCH);
+  assert(eventually_sn < 13*TIMEOUT_BEFORE_SWITCH);
 
   if(EW_hasCars && (light_EW_color == LIGHT_COLOR_RED))
     eventually_ew ++;
   else
     eventually_ew = 0;
-  assert(eventually_ew < 12*TIMEOUT_BEFORE_SWITCH);
+  assert(eventually_ew < 13*TIMEOUT_BEFORE_SWITCH);
 
   if(WE_hasCars && (light_WE_color == LIGHT_COLOR_RED))
     eventually_we ++;
   else
     eventually_we = 0;
-  assert(eventually_we < 12*TIMEOUT_BEFORE_SWITCH);
+  assert(eventually_we < 13*TIMEOUT_BEFORE_SWITCH);
 
 
   prev_ns = now_ns;
