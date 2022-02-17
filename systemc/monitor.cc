@@ -171,7 +171,7 @@ void Monitor::crossing_arrival_constraints()
     eventually_ns ++;
   else
     eventually_ns = 0;
-  assert(eventually_ns < 13*TIMEOUT_BEFORE_SWITCH);
+  assert(eventually_ns < 13*TIMEOUT_BEFORE_SWITCH); // controller is 1Hz, monitor is 10Hz --> 1s = 10+3 monitor cycles
 
   if(SN_hasCars && (light_SN_color == LIGHT_COLOR_RED))
     eventually_sn ++;
