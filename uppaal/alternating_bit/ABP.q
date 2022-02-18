@@ -3,6 +3,16 @@
 /*
 
 */
+E<> CHAN.C1
+
+/*
+
+*/
+E<> CHAN.C0
+
+/*
+
+*/
 E<> SND.send_m1
 
 /*
@@ -24,11 +34,6 @@ E<> RCV.rcv_m0
 
 */
 SND.send_m0 --> RCV.rcv_m0
-
-/*
-Why is this not fullfillable? is it not guaranteed that after the initial state, the send_msg state is reached?
-*/
-SND.M0 --> SND.send_msg
 
 /*
 the system is deadlock free
