@@ -8,18 +8,14 @@ SRCS = light.cc sensor.cc controller.cc monitor.cc traffic_testbench.cc
 ## DO NOT CHANGE ANYTHING BELOW ##
 ##################################
 
-SYSTEMC = /home/simon/systemc-2.3.1a
-#/mnt/c/users/julee/systemc-2.3.1a
-#SYSTEMC = /courses/TDTS07/sw/systemc
+SYSTEMC = /courses/TDTS07/sw/systemc
 TARGET_ARCH = linux64
 
 LIBDIR = -L. -L.. -L$(SYSTEMC)/lib-$(TARGET_ARCH)
 LIBS = -Wl,-Bstatic -lsystemc -Wl,-Bdynamic -lm -lpthread
 LDFLAGS = -g
 
-#When working on the lab computers take the g++ version
-CC = g++-4.8
-#CC = g++
+CC = g++
 OPT = -O3
 CFLAGS = -Wno-deprecated
 EXE = $(PROGRAM)
