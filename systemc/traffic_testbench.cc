@@ -19,14 +19,18 @@ int sc_main(int argc, char **argv)
   // Create channels.
   sc_signal<bool> en_axis_NS;
   sc_signal<bool> en_axis_EW;
-  sc_signal<int>  light_NS_color;
-  sc_signal<int>  light_SN_color;
-  sc_signal<int>  light_EW_color;
-  sc_signal<int>  light_WE_color;
-  sc_signal<bool>  sensor_NS;
-  sc_signal<bool>  sensor_SN;
-  sc_signal<bool>  sensor_EW;
-  sc_signal<bool>  sensor_WE;
+  sc_signal<bool> car_waiting_NS;
+  sc_signal<bool> car_waiting_SN;
+  sc_signal<bool> car_waiting_EW;
+  sc_signal<bool> car_waiting_WE;
+  sc_signal<int> light_NS_color;
+  sc_signal<int> light_SN_color;
+  sc_signal<int> light_EW_color;
+  sc_signal<int> light_WE_color;
+  sc_signal<bool> sensor_NS;
+  sc_signal<bool> sensor_SN;
+  sc_signal<bool> sensor_EW;
+  sc_signal<bool> sensor_WE;
   sc_signal<int> state;
 
   // Instantiate modules.
@@ -45,6 +49,10 @@ int sc_main(int argc, char **argv)
   coordinator.SN_hasCars ( sensor_SN );
   coordinator.EW_hasCars ( sensor_EW );
   coordinator.WE_hasCars ( sensor_WE );
+  coordinator.car_waiting_NS ( car_waiting_NS );
+  coordinator.car_waiting_SN ( car_waiting_SN );
+  coordinator.car_waiting_EW ( car_waiting_EW );
+  coordinator.car_waiting_WE ( car_waiting_WE );
 
   light_NS.en_road ( en_axis_NS );
   light_SN.en_road ( en_axis_NS );
@@ -60,6 +68,11 @@ int sc_main(int argc, char **argv)
   light_SN.sensor ( sensor_SN );
   light_EW.sensor ( sensor_EW );
   light_WE.sensor ( sensor_WE );
+
+  light_NS.car_waiting ( car_waiting_NS );
+  light_SN.car_waiting ( car_waiting_SN );
+  light_EW.car_waiting ( car_waiting_EW );
+  light_WE.car_waiting ( car_waiting_WE );
 
   sensor.state_NS ( sensor_NS );
   sensor.state_SN ( sensor_SN );

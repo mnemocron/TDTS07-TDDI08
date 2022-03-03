@@ -15,6 +15,7 @@ SC_MODULE(Light) {
   sc_in<bool> sensor;
   sc_in<bool> en_road;
   // sc_out<bool> haveCars;
+  sc_inout<bool> car_waiting;
   sc_out<int> color;
 
   SC_HAS_PROCESS(Light);

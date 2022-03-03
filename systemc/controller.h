@@ -16,6 +16,10 @@
 SC_MODULE(Controller) {
   sc_out<bool> en_axis_NS;
   sc_out<bool> en_axis_EW;
+  sc_in<bool> car_waiting_NS;
+  sc_in<bool> car_waiting_SN;
+  sc_in<bool> car_waiting_EW;
+  sc_in<bool> car_waiting_WE;
   sc_in<bool>  NS_hasCars;
   sc_in<bool>  SN_hasCars;
   sc_in<bool>  EW_hasCars;

@@ -1,4 +1,5 @@
 #include "controller.h"
+#include <iostream>
 
 Controller::Controller(sc_module_name name)
   : sc_module(name)
@@ -33,7 +34,8 @@ void Controller::loop()
 
       case(STATE_NS_AXIS):
         // if the other axis has cars waiting
-        if(EW_hasCars.read() == true || WE_hasCars.read() == true){
+        if(EW_hasCars.read() == true || WE_hasCars.read() == true 
+            || car_waiting_EW.read() == true || car_waiting_WE.read() == true){
           counter ++; // start counting down before switching to other axis
           if(counter > TIMEOUT_BEFORE_SWITCH){
             counter = 0;
@@ -53,7 +55,8 @@ void Controller::loop()
 
       case(STATE_EW_AXIS):
         // if the other axis has cars waiting
-        if(NS_hasCars.read() == true || SN_hasCars.read() == true){
+        if(NS_hasCars.read() == true || SN_hasCars.read() == true 
+            || car_waiting_NS.read() == true || car_waiting_SN.read() == true){
           counter ++; // start counting down before switching to other axis
           if(counter > TIMEOUT_BEFORE_SWITCH){
             counter = 0;
