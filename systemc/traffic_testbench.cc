@@ -91,6 +91,11 @@ int sc_main(int argc, char **argv)
   monitor.SN_hasCars ( sensor_SN );
   monitor.EW_hasCars ( sensor_EW );
   monitor.WE_hasCars ( sensor_WE );
+  
+  monitor.car_waiting_NS ( car_waiting_NS );
+  monitor.car_waiting_SN ( car_waiting_SN );
+  monitor.car_waiting_EW ( car_waiting_EW );
+  monitor.car_waiting_WE ( car_waiting_WE );
 
   // Start the simulation.
   sc_start(sim_time);

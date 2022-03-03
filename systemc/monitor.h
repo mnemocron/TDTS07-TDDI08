@@ -20,6 +20,11 @@ SC_MODULE(Monitor) {
   sc_in<bool> en_axis_NS;
   sc_in<bool> en_axis_EW;
 
+  sc_in<bool> car_waiting_NS;
+  sc_in<bool> car_waiting_SN;
+  sc_in<bool> car_waiting_EW;
+  sc_in<bool> car_waiting_WE;
+
   int counter_arriving_NS;
   int counter_arriving_SN;
   int counter_arriving_EW;

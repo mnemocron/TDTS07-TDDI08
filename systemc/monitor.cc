@@ -16,10 +16,10 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   previous_car_EW = false;
   previous_car_WE = false;
 
-  prev_ns=false; now_ns=false; car_waiting_ns=false;
-  prev_sn=false; now_sn=false; car_waiting_sn=false;
-  prev_ew=false; now_ew=false; car_waiting_ew=false;
-  prev_we=false; now_we=false; car_waiting_we=false;
+  // prev_ns=false; now_ns=false; car_waiting_ns=false;
+  // prev_sn=false; now_sn=false; car_waiting_sn=false;
+  // prev_ew=false; now_ew=false; car_waiting_ew=false;
+  // prev_we=false; now_we=false; car_waiting_we=false; 
   eventually_ns = 0;
   eventually_sn = 0;
   eventually_ew = 0;
@@ -31,6 +31,11 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << light_SN_color;
   sensitive << light_EW_color;
   sensitive << light_WE_color;
+
+  sensitive << car_waiting_NS;
+  sensitive << car_waiting_SN;
+  sensitive << car_waiting_EW;
+  sensitive << car_waiting_WE;
 
   sensitive << en_axis_EW;
   sensitive << en_axis_NS;
@@ -46,6 +51,11 @@ Monitor::Monitor(sc_module_name name, char *outfile)
   sensitive << light_SN_color;
   sensitive << light_EW_color;
   sensitive << light_WE_color;
+
+  sensitive << car_waiting_NS;
+  sensitive << car_waiting_SN;
+  sensitive << car_waiting_EW;
+  sensitive << car_waiting_WE;
 
   sensitive << en_axis_EW;
   sensitive << en_axis_NS;
@@ -102,66 +112,66 @@ void Monitor::crossing_arrival_constraints()
 {
   for(;;){
   // If a vehicle arrives at the crossing, it will eventually be granted the green light
-  now_ns = NS_hasCars;
-  now_sn = SN_hasCars;
-  now_ew = EW_hasCars;
-  now_we = WE_hasCars;
+  // now_ns = NS_hasCars;
+  // now_sn = SN_hasCars;
+  // now_ew = EW_hasCars;
+  // now_we = WE_hasCars;
 
-  if(!car_waiting_ns){
-    if(now_ns > prev_ns){ // sensor just switched 0->1
-      car_waiting_ns = true; // remember that there is a car waiting
-    }
-  } else {
-    if(now_ns < prev_ns){ // sensor just switched 1->0
-      car_waiting_ns = false; // forget that ther is a car waiting
-    }
-  }
+  // if(!car_waiting_ns){
+  //   if(now_ns > prev_ns){ // sensor just switched 0->1
+  //     car_waiting_ns = true; // remember that there is a car waiting
+  //   }
+  // } else {
+  //   if(now_ns < prev_ns){ // sensor just switched 1->0
+  //     car_waiting_ns = false; // forget that there is a car waiting
+  //   }
+  // }
 
-  if(!car_waiting_sn){
-    if(now_sn > prev_sn){ // sensor just switched 0->1
-      car_waiting_sn = true; // remember that there is a car waiting
-    }
-  } else {
-    if(now_sn < prev_sn){ // sensor just switched 1->0
-      car_waiting_sn = false; // forget that ther is a car waiting
-    }
-  }
+  // if(!car_waiting_sn){
+  //   if(now_sn > prev_sn){ // sensor just switched 0->1
+  //     car_waiting_sn = true; // remember that there is a car waiting
+  //   }
+  // } else {
+  //   if(now_sn < prev_sn){ // sensor just switched 1->0
+  //     car_waiting_sn = false; // forget that there is a car waiting
+  //   }
+  // }
 
-  if(!car_waiting_ew){
-    if(now_ew > prev_ew){ // sensor just switched 0->1
-      car_waiting_ew = true; // remember that there is a car waiting
-    }
-  } else {
-    if(now_ew < prev_ew){ // sensor just switched 1->0
-      car_waiting_ew = false; // forget that ther is a car waiting
-    }
-  }
+  // if(!car_waiting_ew){
+  //   if(now_ew > prev_ew){ // sensor just switched 0->1
+  //     car_waiting_ew = true; // remember that there is a car waiting
+  //   }
+  // } else {
+  //   if(now_ew < prev_ew){ // sensor just switched 1->0
+  //     car_waiting_ew = false; // forget that ther is a car waiting
+  //   }
+  // }
 
-  if(!car_waiting_we){
-    if(now_we > prev_we){ // sensor just switched 0->1
-      car_waiting_we = true; // remember that there is a car waiting
-    }
-  } else {
-    if(now_we < prev_we){ // sensor just switched 1->0
-      car_waiting_we = false; // forget that ther is a car waiting
-    }
-  }
+  // if(!car_waiting_we){
+  //   if(now_we > prev_we){ // sensor just switched 0->1
+  //     car_waiting_we = true; // remember that there is a car waiting
+  //   }
+  // } else {
+  //   if(now_we < prev_we){ // sensor just switched 1->0
+  //     car_waiting_we = false; // forget that ther is a car waiting
+  //   }
+  // }
 
   // check independence of lights
   // when axis is enabled and a new car arrives, the light should switch to green
   if(en_axis_NS){
-    if(car_waiting_ns){
+    if(car_waiting_NS){
       assert(light_NS_color == LIGHT_COLOR_GREEN);
     }
-    if(car_waiting_sn){
+    if(car_waiting_SN){
       assert(light_SN_color == LIGHT_COLOR_GREEN);
     }
   }
   if(en_axis_EW){
-    if(car_waiting_ew){
+    if(car_waiting_EW){
       assert(light_EW_color == LIGHT_COLOR_GREEN);
     }
-    if(car_waiting_we){
+    if(car_waiting_WE){
       assert(light_WE_color == LIGHT_COLOR_GREEN);
     }
   }
@@ -192,10 +202,10 @@ void Monitor::crossing_arrival_constraints()
   assert(eventually_we < 13*TIMEOUT_BEFORE_SWITCH);
 
 
-  prev_ns = now_ns;
-  prev_sn = now_sn;
-  prev_ew = now_ew;
-  prev_we = now_we;
+  // prev_ns = now_ns;
+  // prev_sn = now_sn;
+  // prev_ew = now_ew;
+  // prev_we = now_we;
   
   wait(0.1, SC_SEC);
   }
