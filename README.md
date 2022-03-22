@@ -1,13 +1,8 @@
 # TDTS07-TDDI08
-TDTS07/TDDI08 System Design and Methodology - Lab Files
+TDTS07/TDDI08 System Design and Methodology - Lab Files - VT2022
 
-```bash
-cd systemc
-make
-./stoplight.x 20 sensor_input.txt test.txt
-```
+The provided lab reports are revised and in the state where they were accepted as `pass`.
 
-```bash
-./stoplight.x <time> <input.txt> <output.txt>
-```
+
+
 
