@@ -6,23 +6,28 @@
 - a) What does it mean by data-driven and control-driven concurrency?
 - b) Give an example for each of them.
 
-> a)
-> data driven concurrency: 
+> a) 
+> **data driven**:
 > - the model has no specification of the order of tasks
+> 
 > tasks have to wait for the data that they process. this can be a task waiting for another task to finish pre processing. or a task waiting for a sensor to deliver new input data.
-> control driven: 
+
+> **control driven** 
 > - order of execution is explicitly modelled
+> 
 > tasks are running because of a schedule or top level scheduler without the need to wait for data.
 
 > b)
-> data driven: DSP applications
-> control driven: static schedule
+> - data driven: DSP applications
+> - control driven: static schedule
 
 ---
 
 ### Design Flow (3p)
 - a) Describe, using a ﬂow graph, the design ﬂow of an embedded systems, from an informal speciﬁcation to fabrication.
 - b) Give short comments on the design steps which belong to the system-level.
+
+![img/design_flow.png](img/design_flow.png)
 
 ---
 
@@ -32,6 +37,7 @@
 
 > a) all events in an FSM happen instantly. 
 > It implies an ideal model with zero-delay computation (of output) and communication (internally or with other FSMs).
+
 > b) The reaction time of the system (including internal communication) is 
 > neglectable compared to the rate of external events.
 
@@ -41,15 +47,19 @@
 - a) What does it mean by control-dependent and data-dependent synchronization?
 - b) Give an example for each? 
 
-a) under control-dependent synchronization, the control structure is responsible for the synchronization. example: we have a static schedule of tasks that are running sequentially. 
-b) under data-dependent synchronization, the synchronization happens upon a change of data. example: a task is polling for a memory location to change.
+> a) under control-dependent synchronization, the control structure is responsible for the synchronization. 
+> example: 
+> - we have a static schedule of tasks that are running sequentially
+
+> b) under data-dependent synchronization, the synchronization happens upon a change of data. 
+> example: 
+> - a task is polling for a memory location to change
+> - interrupt triggers an ISR 
 
 ---
 
 ### Discrete Event Simulator (2p)
 - How does a discrete event simulator work? Illustrate by a ﬂow-graph. 
-
-![img/discrete_event_simulator.png](img/discrete_event_simulator.png)
 
 ![img/discrete_event_simulator_2.png](img/discrete_event_simulator_2.png)
 
@@ -76,9 +86,9 @@ We have identiﬁed three properties which can be analyzed on systems modeled as
 - Boundedness.
 - Liveness.
 - Reachability.
+
 How is each of these properties deﬁned?
-What is the practical signiﬁcance of each of these properties (what does it say about the sys-
-tem)? 
+What is the practical signiﬁcance of each of these properties (what does it say about the system)? 
 
 > - **boundedness**: number of tokens in a place does not exceed a limit. available resources are not exceeded
 > - **liveness**: for every system state, a transistion can be activated, important for deadlocks
@@ -101,7 +111,7 @@ Comment on each of them.
 1. **Instruction Set** (remove / add)
 	- introduce specialized instructions 
 	- e.g. SIMD (single-instruction-multiple-data) in GPUs or MACC (multiply-accumulate) in DSP
-2. **Function unit** and data path
+2. **Function unit and data path**
 	- implementation of the instruction set
 	- word length, register count, additional ALU
 	- new peripherals (e.g. ECC, CRC, cryptographic functions, pixel operations)
@@ -132,10 +142,14 @@ energy
 Describe a simple design ﬂow for processor specialization. Illustrate also by a ﬁgure. 
 Comment on the design tools you need.
 
+How does this differ from the design ﬂow for a platform deﬁnition?
+
 ![img/ASIP_design_flow.png](img/ASIP_design_flow.png)
 
 > use tools like MPARM to simulate the algorithms on the newly specified architecture
 
+> Difference to platform definition: there is only a single algorithm for a single processor. 
+> No mapping is required.
 
 ---
 
@@ -145,14 +159,16 @@ Comment on the design tools you need.
 - c) How do we solve the problem that only discrete voltage levels are available?
 - d) Discuss what the problems are if leakage energy is ignored.
 
-> a) when there are few tasks (low CPU utilization) the processor can lower the clock and voltage to save energy. 
+> a) _"If a processor uses a single supply voltage and completes a program just on deadline, the energy consumption is minimised."_
 
 > b) The problem is: Which task to execute at a certain moment on a certain processor **at which voltage** so that time constraints are fulfilled **and energy consumption is minimized**.
-> Because, changing clock and voltage uses energy and time. it it is done too often, it will consume more energy than just keeping a constant frequency. since the occurrence of high resource tasks is non deterministic, there is the challenge of deciding if/when/how often to change the power state.
+> Because, changing clock and voltage uses energy and time. If it is done too often, it will consume more energy than just keeping a constant frequency. Since the occurrence of high resource tasks is non deterministic, there is the challenge of deciding if/when/how often to change the power state.
 
 > c) Since voltage levels are discrete, but time is virtually continuous, we can decide when to switch from the _lower than ideal voltage_ to the _higher than required voltage_. Thereby we can still finish a task at its deadline by running it at two different voltages.
 
 > d) Dynamic Energy (per cycle) scales linarly with the voltage. Leakage however grows larger with low voltages. If the voltage is reduced too much, energy consumption risies again due to the increased leakage current.
+
+![img/leakage_diagram.png](img/leakage_diagram.png)
 
 ---
 
@@ -169,16 +185,21 @@ Compare.
 ---
 
 ### Kahn Process Networks (3p)
-Deﬁne Kahn process networks.
+Define Kahn process networks.
 Show by an example how determinism is guaranteed with Kahn process networks.
-Transform the example and show that a more general dataﬂow network, which is not a Kahn 
+Transform the example and show that a more general dataflow network, which is not a Kahn 
 process network, does not guarantee determinism.
 
-Todo
+> **Definition**: Synchronous dataflow networks are Kahn process networks with restriction:
+> - At each activation (firing) a process produces and consumes a fixed number of tokens on each of its outgoing and incoming channels
+> - For a process to fire, it must have at least as many tokens on its input channels as it has to consume
 
 > - deterministic
 > - dynamic (data dependent, no static schedule)
 > - memory for message passing (memory overhead)
+
+> The example: **reads are blocking** (writes are non-blocking). 
+> If you remove the blocking-read property e.g. by a timeout, determinism is also lost.
 
 ---
 
@@ -205,7 +226,6 @@ What are the advantages/disadvantages of static cyclic scheduling?
 > - polling instead of interrupt events
 > - manual splitting of tasks
 
-
 ---
 
 ### Static Schedule (3p)
@@ -215,7 +235,10 @@ c) What does it mean by preemptive and non-preemptive scheduling?
 
 Todo
 
-> a) 
+> a) Which task and communication has to be executed at a certain moment on a 
+> given processor or bus respectively, so that time constraints are fulfilled?
+> A set of tasks is schedulable if, given a certain scheduling policy, all 
+> constraints will be completed.
 
 > b) 
 
@@ -236,7 +259,10 @@ Timed automata are a particular (the simplest) form of hybrid automata. Give an 
 a timed automata model of your choice. Explain the model. Specify the same model as 
 hybrid automata.
 
-> todo
+![img/timed_hybrid_automaton.png](img/timed_hybrid_automaton.png)
+
+> In the hybrid automata the clock `x` is replaced by a differential equation in each state.
+> For a simple clock, the equation becomes `x'(t) = 1` which means, the clock is always rising (counting) in each state.
 
 ---
 
